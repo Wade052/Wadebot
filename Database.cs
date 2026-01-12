@@ -3,7 +3,7 @@ using System;
 using System.IO;
 using static System.Net.Mime.MediaTypeNames;
 
-//Table was created by me to store birthdays for users in different guilds
+//Table was created by me to store birthdays and logs for users in different guilds
 //How to set up the database to c# was by OpenAI ChatGPT5
 namespace Wadebot
 {
