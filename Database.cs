@@ -7,6 +7,7 @@ using static System.Net.Mime.MediaTypeNames;
 //How to set up the database to c# was by OpenAI ChatGPT5
 namespace Wadebot
 {
+        /* aaa */
 
     /* Breakdown of the Birthdays table structure:
      *          CREATE TABLE IF NOT EXISTS Birthdays (
