@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -59,7 +60,7 @@ namespace Wadebot.commands
         /*
          * Command : Add
          * Function : Wadebot will add two integers provided by the user and return the sum
-         * Cooldown : 1 use every 55 seconds per user
+         * Cooldown : 1 use every 5 seconds per user
         */
         [Command("Add")]
         [Cooldown(1, 5, CooldownBucketType.User)]
@@ -414,6 +415,7 @@ namespace Wadebot.commands
                 await ctx.RespondAsync("❌ Invalid date.");
                 return;
             }
+            var logdate = DateTime.Now;
 
             using var connection = Database.GetConnection();
             connection.Open();
@@ -434,6 +436,26 @@ namespace Wadebot.commands
             command.ExecuteNonQuery();
 
             await ctx.RespondAsync($"🎉 Birthday saved: **{month}/{day}/{(year == 0 ? "?" : year)}**");
+
+            //Log System
+            connection.Open();
+
+            var logs = connection.CreateCommand();
+            command.CommandText =
+            @"
+    INSERT OR REPLACE INTO Birthdays (UserId, UserName, GuildId, GuildName, Command, Date, Output)
+    VALUES ($userID, $user, $guild, $server, $command, $date, $output);
+    ";
+
+            command.Parameters.AddWithValue("$userID", ctx.User.Id.ToString());
+            command.Parameters.AddWithValue("$user", ctx.User.ToString());
+            command.Parameters.AddWithValue("$guild", ctx.Guild.Id.ToString());
+            command.Parameters.AddWithValue("server", ctx.Guild.ToString());
+            command.Parameters.AddWithValue("command", "SetBirthday");
+            command.Parameters.AddWithValue("date", logdate.ToString());
+            command.Parameters.AddWithValue("output","Birthday Saved: "+month+"/"+day+"/"+year);
+
+            command.ExecuteNonQuery();
         }
 
 

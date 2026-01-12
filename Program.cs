@@ -18,7 +18,7 @@ using Wadebot.commands;
 // Date : 10/16/2025 - present
 // https://www.youtube.com/watch?v=qxlmioSDWmk - Used this video to help set up the bot structure with DSharpPlus
 // current version : 1.2.2
-// Latest update : 01/7/2026 - Added Comments to commands and database for clarity.
+// Latest update : 01/12/2026 - Started Logging feature for commands used by users in different guilds through a database and set up a Git
 
 
 namespace Wadebot
