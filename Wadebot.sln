@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 18
+VisualStudioVersion = 18.0.11222.15 d18.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wadebot", "Wadebot.csproj", "{DDB9A549-68BD-C6DD-0A97-E2FA49A0A1FA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DDB9A549-68BD-C6DD-0A97-E2FA49A0A1FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DDB9A549-68BD-C6DD-0A97-E2FA49A0A1FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DDB9A549-68BD-C6DD-0A97-E2FA49A0A1FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DDB9A549-68BD-C6DD-0A97-E2FA49A0A1FA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FD84EFC9-58F6-4564-BC90-475F684C6E73}
+	EndGlobalSection
+EndGlobal
