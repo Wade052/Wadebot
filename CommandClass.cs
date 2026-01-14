@@ -11,6 +11,7 @@ using System.Linq;
 using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Wadebot.commands
 {
@@ -33,8 +34,29 @@ namespace Wadebot.commands
             await ctx.Channel.SendMessageAsync(chosenWord);
             string timestamp = DateTime.Now.ToString("HH:mm:ss");
             var user = ctx.User;
-            var log = $"{user.Username}#{user.Discriminator} asked me to speak and I responded with {chosenWord}";
-            Console.WriteLine(log);
+
+
+
+            //Log System
+            using var connection = Database.GetConnection();
+            connection.Open();
+
+            var logs = connection.CreateCommand();
+            logs.CommandText =
+            @"
+    INSERT INTO Logs (UserId, UserName, GuildId, GuildName, Command, Date, Output)
+    VALUES ($userID, $user, $guild, $server, $command, $date, $output);
+    ";
+
+            logs.Parameters.AddWithValue("$userID", ctx.User.Id.ToString());
+            logs.Parameters.AddWithValue("$user", ctx.User.Username.ToString());
+            logs.Parameters.AddWithValue("$guild", ctx.Guild.Id.ToString());
+            logs.Parameters.AddWithValue("server", ctx.Guild.ToString());
+            logs.Parameters.AddWithValue("command", "SetBirthday");
+            logs.Parameters.AddWithValue("date", timestamp.ToString());
+            logs.Parameters.AddWithValue("output", "Wade Bot said: "+ chosenWord);
+
+            logs.ExecuteNonQuery();
         }
 
         /*
@@ -441,19 +463,19 @@ namespace Wadebot.commands
             connection.Open();
 
             var logs = connection.CreateCommand();
-            command.CommandText =
+            logs.CommandText =
             @"
-    INSERT OR REPLACE INTO Birthdays (UserId, UserName, GuildId, GuildName, Command, Date, Output)
+    INSERT INTO Logs (UserId, UserName, GuildId, GuildName, Command, Date, Output)
     VALUES ($userID, $user, $guild, $server, $command, $date, $output);
     ";
 
-            command.Parameters.AddWithValue("$userID", ctx.User.Id.ToString());
-            command.Parameters.AddWithValue("$user", ctx.User.ToString());
-            command.Parameters.AddWithValue("$guild", ctx.Guild.Id.ToString());
-            command.Parameters.AddWithValue("server", ctx.Guild.ToString());
-            command.Parameters.AddWithValue("command", "SetBirthday");
-            command.Parameters.AddWithValue("date", logdate.ToString());
-            command.Parameters.AddWithValue("output","Birthday Saved: "+month+"/"+day+"/"+year);
+            logs.Parameters.AddWithValue("$userID", ctx.User.Id.ToString());
+            logs.Parameters.AddWithValue("$user", ctx.User.ToString());
+            logs.Parameters.AddWithValue("$guild", ctx.Guild.Id.ToString());
+            logs.Parameters.AddWithValue("server", ctx.Guild.ToString());
+            logs.Parameters.AddWithValue("command", "SetBirthday");
+            logs.Parameters.AddWithValue("date", logdate.ToString());
+            logs.Parameters.AddWithValue("output","Birthday Saved: "+month+"/"+day+"/"+year);
 
             command.ExecuteNonQuery();
         }
