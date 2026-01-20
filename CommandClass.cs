@@ -52,7 +52,7 @@ namespace Wadebot.commands
             logs.Parameters.AddWithValue("$user", ctx.User.Username.ToString());
             logs.Parameters.AddWithValue("$guild", ctx.Guild.Id.ToString());
             logs.Parameters.AddWithValue("server", ctx.Guild.ToString());
-            logs.Parameters.AddWithValue("command", "SetBirthday");
+            logs.Parameters.AddWithValue("command", "Speak");
             logs.Parameters.AddWithValue("date", timestamp.ToString());
             logs.Parameters.AddWithValue("output", "Wade Bot said: "+ chosenWord);
 
@@ -74,8 +74,27 @@ namespace Wadebot.commands
             await ctx.Channel.SendMessageAsync($"Question: {question}\nAnswer: {chosenResponse}");
             string timestamp = DateTime.Now.ToString("HH:mm:ss");
             var user = ctx.User;
-            var log = $"{user.Username}#{user.Discriminator} asked {question} and I responded with {chosenResponse} at {timestamp}";
-            Console.WriteLine(log);
+
+            //Log System
+            using var connection = Database.GetConnection();
+            connection.Open();
+
+            var logs = connection.CreateCommand();
+            logs.CommandText =
+            @"
+    INSERT INTO Logs (UserId, UserName, GuildId, GuildName, Command, Date, Output)
+    VALUES ($userID, $user, $guild, $server, $command, $date, $output);
+    ";
+
+            logs.Parameters.AddWithValue("$userID", ctx.User.Id.ToString());
+            logs.Parameters.AddWithValue("$user", ctx.User.Username.ToString());
+            logs.Parameters.AddWithValue("$guild", ctx.Guild.Id.ToString());
+            logs.Parameters.AddWithValue("server", ctx.Guild.ToString());
+            logs.Parameters.AddWithValue("command", "8ball");
+            logs.Parameters.AddWithValue("date", timestamp.ToString());
+            logs.Parameters.AddWithValue("output", user+" asked" + question + "Wade Bot said: " + chosenResponse);
+
+            logs.ExecuteNonQuery();
         }
         // The Following commands deal with basic arithmetic operations
 

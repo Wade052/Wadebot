@@ -30,8 +30,8 @@ namespace Wadebot
             using var connection = new SqliteConnection(ConnectionString);
             connection.Open();
 
-            var command = connection.CreateCommand();
-            command.CommandText =
+            var birthdayCmd = connection.CreateCommand();
+            birthdayCmd.CommandText =
             @"
             CREATE TABLE IF NOT EXISTS Birthdays (
                 UserId  TEXT NOT NULL,
@@ -40,25 +40,22 @@ namespace Wadebot
                 Day     INTEGER NOT NULL,
                 Year    INTEGER,
                 PRIMARY KEY (UserId, GuildId)
-            );
-            ";
+            );";
+            birthdayCmd.ExecuteNonQuery();
 
-            var logs = connection.CreateCommand();
-            command.CommandText =
+            var logsCmd = connection.CreateCommand();
+            logsCmd.CommandText =
             @"
             CREATE TABLE IF NOT EXISTS Logs (
                 UserId  TEXT NOT NULL,
-                UserName TEXT, 
+                UserName TEXT,
                 GuildId TEXT NOT NULL,
-                GuildName TEXT, 
+                GuildName TEXT,
                 Command   TEXT NOT NULL,
                 Date     TEXT NOT NULL,
-                Output    TEXT NOT NULL,
-                PRIMARY KEY (UserId, GuildId)
-            );
-            ";
-
-            command.ExecuteNonQuery();
+                Output    TEXT NOT NULL
+            );";
+            logsCmd.ExecuteNonQuery();
         }
 
         public static SqliteConnection GetConnection()
