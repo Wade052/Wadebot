@@ -57,6 +57,21 @@ namespace Wadebot.commands
             logs.Parameters.AddWithValue("output", "Wade Bot said: "+ chosenWord);
 
             logs.ExecuteNonQuery();
+
+            bool leveledUp = Database.AddXp(
+    ctx.User.Id,
+    ctx.Guild.Id,
+    10, // XP per command
+    out int newLevel
+);
+
+            if (leveledUp)
+            {
+                await ctx.Channel.SendMessageAsync(
+                    $"🎉 {ctx.User.Mention} reached **Level {newLevel}**!"
+                );
+            }
+
         }
 
         /*
@@ -109,6 +124,20 @@ namespace Wadebot.commands
             logs.Parameters.AddWithValue("output", user+" asked" + question + "Wade Bot said: " + chosenResponse);
 
             logs.ExecuteNonQuery();
+            bool leveledUp = Database.AddXp(
+    ctx.User.Id,
+    ctx.Guild.Id,
+    10, // XP per command
+    out int newLevel
+);
+
+            if (leveledUp)
+            {
+                await ctx.Channel.SendMessageAsync(
+                    $"🎉 {ctx.User.Mention} reached **Level {newLevel}**!"
+                );
+            }
+
         }
         // The Following commands deal with basic arithmetic operations
 
@@ -127,6 +156,21 @@ namespace Wadebot.commands
             var user = ctx.User;
             var Log = $"{user.Username}#{user.Discriminator} Calculated {a} + {b} = {sum} at {timestamp}";
             Console.WriteLine(Log);
+
+            bool leveledUp = Database.AddXp(
+    ctx.User.Id,
+    ctx.Guild.Id,
+    10, // XP per command
+    out int newLevel
+);
+
+            if (leveledUp)
+            {
+                await ctx.Channel.SendMessageAsync(
+                    $"🎉 {ctx.User.Mention} reached **Level {newLevel}**!"
+                );
+            }
+
         }
 
 
@@ -145,6 +189,21 @@ namespace Wadebot.commands
             var user = ctx.User;
             var Log = $"{user.Username}#{user.Discriminator} Calculated {a} - {b} = {difference} at {timestamp}";
             Console.WriteLine(Log);
+
+            bool leveledUp = Database.AddXp(
+    ctx.User.Id,
+    ctx.Guild.Id,
+    10, // XP per command
+    out int newLevel
+);
+
+            if (leveledUp)
+            {
+                await ctx.Channel.SendMessageAsync(
+                    $"🎉 {ctx.User.Mention} reached **Level {newLevel}**!"
+                );
+            }
+
         }
 
         /*
@@ -162,6 +221,21 @@ namespace Wadebot.commands
             var user = ctx.User;
             var Log = $"{user.Username}#{user.Discriminator} Calculated {a} * {b} = {product} at {timestamp}";
             Console.WriteLine(Log);
+
+            bool leveledUp = Database.AddXp(
+    ctx.User.Id,
+    ctx.Guild.Id,
+    10, // XP per command
+    out int newLevel
+);
+
+            if (leveledUp)
+            {
+                await ctx.Channel.SendMessageAsync(
+                    $"🎉 {ctx.User.Mention} reached **Level {newLevel}**!"
+                );
+            }
+
         }
 
         /*
@@ -184,6 +258,21 @@ namespace Wadebot.commands
             var user = ctx.User;
             var Log = $"{user.Username}#{user.Discriminator} Calculated {a} / {b} = {quotient} at {timestamp}";
             Console.WriteLine(Log);
+
+            bool leveledUp = Database.AddXp(
+    ctx.User.Id,
+    ctx.Guild.Id,
+    10, // XP per command
+    out int newLevel
+);
+
+            if (leveledUp)
+            {
+                await ctx.Channel.SendMessageAsync(
+                    $"🎉 {ctx.User.Mention} reached **Level {newLevel}**!"
+                );
+            }
+
         }
         // end
 
@@ -217,6 +306,21 @@ namespace Wadebot.commands
             var user = ctx.User;
             var Log = $"{user.Username}#{user.Discriminator} Pinged {chosen} at {timestamp}";
             Console.WriteLine(Log);
+
+            bool leveledUp = Database.AddXp(
+    ctx.User.Id,
+    ctx.Guild.Id,
+    10, // XP per command
+    out int newLevel
+);
+
+            if (leveledUp)
+            {
+                await ctx.Channel.SendMessageAsync(
+                    $"🎉 {ctx.User.Mention} reached **Level {newLevel}**!"
+                );
+            }
+
         }
 
         /*
@@ -233,6 +337,21 @@ namespace Wadebot.commands
             var user = ctx.User;
             var Log = $"{user.Username}#{user.Discriminator} used Info {timestamp}";
             Console.WriteLine(Log);
+
+            bool leveledUp = Database.AddXp(
+    ctx.User.Id,
+    ctx.Guild.Id,
+    10, // XP per command
+    out int newLevel
+);
+
+            if (leveledUp)
+            {
+                await ctx.Channel.SendMessageAsync(
+                    $"🎉 {ctx.User.Mention} reached **Level {newLevel}**!"
+                );
+            }
+
         }
 
         /*
@@ -272,6 +391,21 @@ namespace Wadebot.commands
             // Optional: auto-delete the confirmation message after a short delay
             await Task.Delay(3000);
             await confirmation.DeleteAsync();
+
+            bool leveledUp = Database.AddXp(
+    ctx.User.Id,
+    ctx.Guild.Id,
+    10, // XP per command
+    out int newLevel
+);
+
+            if (leveledUp)
+            {
+                await ctx.Channel.SendMessageAsync(
+                    $"🎉 {ctx.User.Mention} reached **Level {newLevel}**!"
+                );
+            }
+
         }
 
         /*
@@ -301,6 +435,21 @@ namespace Wadebot.commands
             var user = ctx.User;
             var logMessage = $"{user.Username}#{user.Discriminator} generated a random number between {Num1} and {Num2}: {RNum}";
             Console.WriteLine(logMessage + " at " + timestamp);
+
+            bool leveledUp = Database.AddXp(
+    ctx.User.Id,
+    ctx.Guild.Id,
+    10, // XP per command
+    out int newLevel
+);
+
+            if (leveledUp)
+            {
+                await ctx.Channel.SendMessageAsync(
+                    $"🎉 {ctx.User.Mention} reached **Level {newLevel}**!"
+                );
+            }
+
         }
 
         /*
@@ -378,6 +527,21 @@ namespace Wadebot.commands
             // Step 6: Send DM response
             await dm.SendMessageAsync(response);
             Console.WriteLine(log);
+
+            bool leveledUp = Database.AddXp(
+    ctx.User.Id,
+    ctx.Guild.Id,
+    10, // XP per command
+    out int newLevel
+);
+
+            if (leveledUp)
+            {
+                await ctx.Channel.SendMessageAsync(
+                    $"🎉 {ctx.User.Mention} reached **Level {newLevel}**!"
+                );
+            }
+
         }
 
         /*
@@ -397,6 +561,21 @@ namespace Wadebot.commands
 
             var TimeStamp = DateTime.Now.ToString("HH:mm");
             var log = $"{user.Username}#{user.Discriminator} was muted by {Muter.Username}#{Muter.Discriminator} for {dur} minutes because {reason} at {TimeStamp}";
+
+            bool leveledUp = Database.AddXp(
+    ctx.User.Id,
+    ctx.Guild.Id,
+    10, // XP per command
+    out int newLevel
+);
+
+            if (leveledUp)
+            {
+                await ctx.Channel.SendMessageAsync(
+                    $"🎉 {ctx.User.Mention} reached **Level {newLevel}**!"
+                );
+            }
+
         }
         /*
          * Command : UnMute
@@ -416,6 +595,21 @@ namespace Wadebot.commands
             var Timestamp = DateTime.Now.ToString("HH:mm");
             var log = $"{user.Username}#{user.Discriminator} was unmuted by {unMuter.Username}#{unMuter.Discriminator} at {Timestamp}";
             Console.WriteLine(log);
+
+            bool leveledUp = Database.AddXp(
+    ctx.User.Id,
+    ctx.Guild.Id,
+    10, // XP per command
+    out int newLevel
+);
+
+            if (leveledUp)
+            {
+                await ctx.Channel.SendMessageAsync(
+                    $"🎉 {ctx.User.Mention} reached **Level {newLevel}**!"
+                );
+            }
+
         }
 
         /*
@@ -435,6 +629,21 @@ namespace Wadebot.commands
             var Timestamp = DateTime.Now.ToString("HH:mm");
             var log = $"{user.Username}#{user.Discriminator} was unmuted by {Banhammer.Username}#{Banhammer.Discriminator} at {Timestamp}";
             Console.WriteLine(log);
+
+            bool leveledUp = Database.AddXp(
+    ctx.User.Id,
+    ctx.Guild.Id,
+    10, // XP per command
+    out int newLevel
+);
+
+            if (leveledUp)
+            {
+                await ctx.Channel.SendMessageAsync(
+                    $"🎉 {ctx.User.Mention} reached **Level {newLevel}**!"
+                );
+            }
+
         }
 
         /*
@@ -448,6 +657,21 @@ namespace Wadebot.commands
         {
             var date = DateTime.Now.ToString("MMMM/d/yyyy");
             await ctx.Channel.SendMessageAsync("The date is " + date);
+
+            bool leveledUp = Database.AddXp(
+    ctx.User.Id,
+    ctx.Guild.Id,
+    10, // XP per command
+    out int newLevel
+);
+
+            if (leveledUp)
+            {
+                await ctx.Channel.SendMessageAsync(
+                    $"🎉 {ctx.User.Mention} reached **Level {newLevel}**!"
+                );
+            }
+
         }
         //Start of Birthday Commands
         /*
@@ -511,6 +735,21 @@ namespace Wadebot.commands
             logs.Parameters.AddWithValue("output","Birthday Saved: "+month+"/"+day+"/"+year);
 
             command.ExecuteNonQuery();
+
+            bool leveledUp = Database.AddXp(
+    ctx.User.Id,
+    ctx.Guild.Id,
+    10, // XP per command
+    out int newLevel
+);
+
+            if (leveledUp)
+            {
+                await ctx.Channel.SendMessageAsync(
+                    $"🎉 {ctx.User.Mention} reached **Level {newLevel}**!"
+                );
+            }
+
         }
 
 
@@ -608,6 +847,21 @@ namespace Wadebot.commands
             }
 
             await ctx.RespondAsync("🎈 **Registered Birthdays:**\n" + string.Join("\n", list));
+
+            bool leveledUp = Database.AddXp(
+    ctx.User.Id,
+    ctx.Guild.Id,
+    10, // XP per command
+    out int newLevel
+);
+
+            if (leveledUp)
+            {
+                await ctx.Channel.SendMessageAsync(
+                    $"🎉 {ctx.User.Mention} reached **Level {newLevel}**!"
+                );
+            }
+
         }
 
         /*
@@ -630,9 +884,87 @@ namespace Wadebot.commands
 
             // Send the answer to Discord
             await ctx.Channel.SendMessageAsync(response);
+
+            bool leveledUp = Database.AddXp(
+    ctx.User.Id,
+    ctx.Guild.Id,
+    10, // XP per command
+    out int newLevel
+);
+
+            if (leveledUp)
+            {
+                await ctx.Channel.SendMessageAsync(
+                    $"🎉 {ctx.User.Mention} reached **Level {newLevel}**!"
+                );
+            }
+
+        }
+        /* Command : RPS
+         * Function : Play Rock-Paper-Scissors against Wadebot
+         * cooldown : 1 use every 5 seconds per user
+         */
+        [Command("RPS")]
+        [Cooldown(1, 5, CooldownBucketType.User)]
+        public async Task rps(CommandContext ctx, string userChoice)
+        {
+            string[] choices = { "rock", "paper", "scissors" };
+            Random rand = new Random();
+            string botChoice = choices[rand.Next(choices.Length)];
+            string result;
+            userChoice = userChoice.ToLower();
+            if (userChoice == botChoice)
+            {
+                result = "It's a tie! :O";
+            }
+            else if ((userChoice == "rock" && botChoice == "scissors") ||
+                     (userChoice == "paper" && botChoice == "rock") ||
+                     (userChoice == "scissors" && botChoice == "paper"))
+            {
+                result = "You win! :D";
+            }
+            else
+            {
+                result = "I win! :D";
+            }
+            await ctx.Channel.SendMessageAsync($"You chose **{userChoice}**. I chose **{botChoice}**. {result}");
+
+            bool leveledUp = Database.AddXp(
+    ctx.User.Id,
+    ctx.Guild.Id,
+    10, // XP per command
+    out int newLevel
+);
+
+            if (leveledUp)
+            {
+                await ctx.Channel.SendMessageAsync(
+                    $"🎉 {ctx.User.Mention} reached **Level {newLevel}**!"
+                );
+            }
+
         }
 
+        /*
+         * Command : Level
+         * Function : Wadebot will display the user's current level and XP
+         * cooldown : 1 use every 5 seconds per user
+        */
+        [Command("level")]
+        [Cooldown(1, 5, CooldownBucketType.User)]
+        public async Task Level(CommandContext ctx)
+        {
+            var (xp, level) =
+                Database.GetOrCreateLevel(ctx.User.Id, ctx.Guild.Id);
 
+            int needed = level * 100;
+
+            await ctx.Channel.SendMessageAsync(
+                $"📊 **{ctx.User.Username}**\n" +
+                $"Level: **{level}**\n" +
+                $"XP: **{xp}/{needed}**"
+            );
+        }
 
     }
 }

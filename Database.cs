@@ -56,7 +56,88 @@ namespace Wadebot
                 Output    TEXT NOT NULL
             );";
             logsCmd.ExecuteNonQuery();
+
+            var LevelsCmd = connection.CreateCommand();
+            LevelsCmd.CommandText =
+                @"
+            CREATE TABLE IF NOT EXISTS Levels (
+                UserId  TEXT NOT NULL,
+                GuildId TEXT NOT NULL,
+                Experience INTEGER NOT NULL,
+                Level INTEGER NOT NULL,
+                PRIMARY KEY (UserId, GuildId)   
+);";
+            LevelsCmd.ExecuteNonQuery();
         }
+        public static (int xp, int level) GetOrCreateLevel(ulong userId, ulong guildId)
+        {
+            using var connection = GetConnection();
+            connection.Open();
+
+            var select = connection.CreateCommand();
+            select.CommandText =
+                @"SELECT Experience, Level
+          FROM Levels
+          WHERE UserId = @user AND GuildId = @guild";
+
+            select.Parameters.AddWithValue("@user", userId.ToString());
+            select.Parameters.AddWithValue("@guild", guildId.ToString());
+
+            using var reader = select.ExecuteReader();
+
+            if (reader.Read())
+                return (reader.GetInt32(0), reader.GetInt32(1));
+
+            var insert = connection.CreateCommand();
+            insert.CommandText =
+                @"INSERT INTO Levels (UserId, GuildId, Experience, Level)
+          VALUES (@user, @guild, 0, 1)";
+
+            insert.Parameters.AddWithValue("@user", userId.ToString());
+            insert.Parameters.AddWithValue("@guild", guildId.ToString());
+            insert.ExecuteNonQuery();
+
+            return (0, 1);
+        }
+
+        public static bool AddXp(
+            ulong userId,
+            ulong guildId,
+            int amount,
+            out int newLevel)
+        {
+            using var connection = GetConnection();
+            connection.Open();
+
+            var (xp, level) = GetOrCreateLevel(userId, guildId);
+
+            xp += amount;
+            int neededXp = level * 100;
+            bool leveledUp = false;
+
+            if (xp >= neededXp)
+            {
+                xp -= neededXp;
+                level++;
+                leveledUp = true;
+            }
+
+            var update = connection.CreateCommand();
+            update.CommandText =
+                @"UPDATE Levels
+          SET Experience = @xp, Level = @level
+          WHERE UserId = @user AND GuildId = @guild";
+
+            update.Parameters.AddWithValue("@xp", xp);
+            update.Parameters.AddWithValue("@level", level);
+            update.Parameters.AddWithValue("@user", userId.ToString());
+            update.Parameters.AddWithValue("@guild", guildId.ToString());
+            update.ExecuteNonQuery();
+
+            newLevel = level;
+            return leveledUp;
+        }
+
 
         public static SqliteConnection GetConnection()
         {
