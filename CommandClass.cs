@@ -68,10 +68,24 @@ namespace Wadebot.commands
         [Cooldown(1, 5, CooldownBucketType.User)]
         public async Task EightBallCommand(CommandContext ctx, [RemainingText] string question)
         {
-            string[] responses = { "Yes", "No", "Maybe", "Definitely", "Absolutely not", "Ask again later" };
+            string[] responses = { "Yes", "No", "Maybe", "Dont count on it", "Definitely", "Absolutely not", "Ask again later", "Allegedly", "I have no idea", "Perchance" };
+            string[] Faces = { ":)", ":(", ":/"};
+            string face = "";
             Random rand = new Random();
             string chosenResponse = responses[rand.Next(responses.Length)];
-            await ctx.Channel.SendMessageAsync($"Question: {question}\nAnswer: {chosenResponse}");
+            if (chosenResponse == responses[0] || chosenResponse == responses[4]) 
+            {
+                face = Faces[0];
+            }
+            else if (chosenResponse == responses[1] || chosenResponse == responses[3]||chosenResponse == responses[5])
+            {
+                face = Faces[1];
+            }
+            else
+            {
+                face = Faces[2];
+            }
+            await ctx.Channel.SendMessageAsync($"Question: {question}\nAnswer: {chosenResponse}\n{face}");
             string timestamp = DateTime.Now.ToString("HH:mm:ss");
             var user = ctx.User;
 
