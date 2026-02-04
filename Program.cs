@@ -11,6 +11,8 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using Wadebot.commands;
+using System.Collections.Concurrent;
+
 
 // Project : Wadebot
 // Programmer : DeAndre Wade
@@ -27,8 +29,10 @@ namespace Wadebot
     {
         private static DiscordClient Client { get; set; }
         private static CommandsNextExtension Commands { get; set; }
-        
-       
+
+        static ConcurrentDictionary<ulong, DateTime> XpCooldown =
+        new ConcurrentDictionary<ulong, DateTime>();
+
         static async Task Main(string[] args)
         {
             Database.Initialize();
@@ -65,6 +69,7 @@ namespace Wadebot
                 EnableMentionPrefix = true,
                 EnableDefaultHelp = false
             };
+
 
             Commands = Client.UseCommandsNext(commandsConfig);
             Commands.RegisterCommands<CommandTest>();

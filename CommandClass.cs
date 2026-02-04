@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.NetworkInformation;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using static System.Net.Mime.MediaTypeNames;
@@ -28,7 +29,7 @@ namespace Wadebot.commands
         [Cooldown(1, 5, CooldownBucketType.User)]
         public async Task PlaceHolderCommand(CommandContext ctx)
         {
-            string[] words = { "Hello", "Im not alive", "I was created in C#", "Not all roads lead to rome", "absolute lamp", "Hue Hue Hue", "New year same me", ":D", "Happy New Year", "oh word?" };
+            string[] words = { "Hello", "Im not alive", "I was created in C#", "Not all roads lead to rome", "absolute lamp", "Hue Hue Hue", "Hello World", ":D", "in the big 26 </3", "oh word?" };
             Random rand = new Random();
             string chosenWord = words[rand.Next(words.Length)];
             await ctx.Channel.SendMessageAsync(chosenWord);
@@ -54,7 +55,7 @@ namespace Wadebot.commands
             logs.Parameters.AddWithValue("server", ctx.Guild.ToString());
             logs.Parameters.AddWithValue("command", "Speak");
             logs.Parameters.AddWithValue("date", timestamp.ToString());
-            logs.Parameters.AddWithValue("output", "Wade Bot said: "+ chosenWord);
+            logs.Parameters.AddWithValue("output", "Wade Bot said: " + chosenWord);
 
             logs.ExecuteNonQuery();
 
@@ -84,15 +85,15 @@ namespace Wadebot.commands
         public async Task EightBallCommand(CommandContext ctx, [RemainingText] string question)
         {
             string[] responses = { "Yes", "No", "Maybe", "Dont count on it", "Definitely", "Absolutely not", "Ask again later", "Allegedly", "I have no idea", "Perchance" };
-            string[] Faces = { ":)", ":(", ":/"};
+            string[] Faces = { ":)", ":(", ":/" };
             string face = "";
             Random rand = new Random();
             string chosenResponse = responses[rand.Next(responses.Length)];
-            if (chosenResponse == responses[0] || chosenResponse == responses[4]) 
+            if (chosenResponse == responses[0] || chosenResponse == responses[4])
             {
                 face = Faces[0];
             }
-            else if (chosenResponse == responses[1] || chosenResponse == responses[3]||chosenResponse == responses[5])
+            else if (chosenResponse == responses[1] || chosenResponse == responses[3] || chosenResponse == responses[5])
             {
                 face = Faces[1];
             }
@@ -121,7 +122,7 @@ namespace Wadebot.commands
             logs.Parameters.AddWithValue("server", ctx.Guild.ToString());
             logs.Parameters.AddWithValue("command", "8ball");
             logs.Parameters.AddWithValue("date", timestamp.ToString());
-            logs.Parameters.AddWithValue("output", user+" asked" + question + "Wade Bot said: " + chosenResponse);
+            logs.Parameters.AddWithValue("output", user + " asked" + question + "Wade Bot said: " + chosenResponse);
 
             logs.ExecuteNonQuery();
             bool leveledUp = Database.AddXp(
@@ -551,7 +552,7 @@ namespace Wadebot.commands
         */
         [Command("Mute")]
         [RequirePermissions(DSharpPlus.Permissions.Administrator)]
-                                                                                                                 /*V Standard Reason V*/
+        /*V Standard Reason V*/
         public async Task Mute(CommandContext ctx, DiscordMember user, int mins, [RemainingText] string reason = "I have no idea gang")
         {
             var Muter = ctx.User;
@@ -732,7 +733,7 @@ namespace Wadebot.commands
             logs.Parameters.AddWithValue("server", ctx.Guild.ToString());
             logs.Parameters.AddWithValue("command", "SetBirthday");
             logs.Parameters.AddWithValue("date", logdate.ToString());
-            logs.Parameters.AddWithValue("output","Birthday Saved: "+month+"/"+day+"/"+year);
+            logs.Parameters.AddWithValue("output", "Birthday Saved: " + month + "/" + day + "/" + year);
 
             command.ExecuteNonQuery();
 
@@ -966,5 +967,63 @@ namespace Wadebot.commands
             );
         }
 
+        [Command("PokemonGuesser")]
+        public async Task PokemonGuesser(CommandContext ctx)
+        {
+            var answerFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Pokemon.txt");
+            if (!File.Exists(answerFilePath))
+            {
+                await ctx.RespondAsync($"Technical Error: answers file not found at `{answerFilePath}`");
+                return;
+            }
+
+            var answers = File.ReadAllLines(answerFilePath)
+                              .Select(s => s?.Trim())
+                              .Where(s => !string.IsNullOrEmpty(s))
+                              .ToArray();
+
+            if (answers.Length == 0)
+            {
+                await ctx.RespondAsync("Technical Error: answers file is empty.");
+                return;
+            }
+
+            // reuse a static Random or a shared instance in the class to avoid seed issues
+            int dexNumber = new Random().Next(1, answers.Length + 1);
+            string filepath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Pokemon", $"{dexNumber}.png");
+
+            if (!File.Exists(filepath))
+            {
+                await ctx.RespondAsync($"Technical Error: I looked for the image at `{filepath}` but it wasn't there!");
+                return;
+            }
+
+            using (var fs = new FileStream(filepath, FileMode.Open, FileAccess.Read))
+            {
+                await new DiscordMessageBuilder()
+                    .WithContent("Who's that Pokémon?")
+                    .AddFile(fs)
+                    .SendAsync(ctx.Channel);
+            }
+
+            string correctName = answers[dexNumber - 1];
+
+            var interactivity = ctx.Client.GetInteractivity();
+            var response = await interactivity.WaitForMessageAsync(
+                x => x.Content.Equals(correctName, StringComparison.OrdinalIgnoreCase) && x.Author.Id == ctx.User.Id,
+                TimeSpan.FromSeconds(45));
+
+            if (response.TimedOut)
+                await ctx.RespondAsync($"Time's up😒! It was {correctName}.");
+            else
+                await ctx.RespondAsync("🎉You are correct YIPPEE🎉");
+
+            bool leveledUp = Database.AddXp(
+    ctx.User.Id,
+    ctx.Guild.Id,
+    10, // XP per command
+    out int newLevel
+);
+        }
     }
 }
