@@ -28,4 +28,4 @@ Users automatically gain experience by sending messages. XP is tracked per user 
 Author
 DeAndre Wade
 Started: 10/16/2025
-Current Version: 1.2.2
+Current Version: 1.4.5
