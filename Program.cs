@@ -19,8 +19,8 @@ using System.Collections.Concurrent;
 // Description : A functional Discord bot built with DSharpPlus and OpenAI integration.
 // Date : 10/16/2025 - present
 // https://www.youtube.com/watch?v=qxlmioSDWmk - Used this video to help set up the bot structure with DSharpPlus
-// current version : 1.2.2
-// Latest update : 01/12/2026 - Started Logging feature for commands used by users in different guilds through a database and set up a Git
+// current version : 1.4.5
+// Latest update : 02/05/2026 - Cleaned up code to make it more readable and maintainable. 
 
 
 namespace Wadebot
@@ -70,9 +70,48 @@ namespace Wadebot
                 EnableDefaultHelp = false
             };
 
+            #region Level Commands
+            // Level
+            #endregion
+            #region fun Commands
+            // Speak
+            // 8ball
+            // RPS
+            // Whisper
+            // PokemonGuesser
+            // Roulette
+            #endregion
+            #region Math Commands
+            // Add
+            // Subtract
+            // Multiply
+            // Divide
+            #endregion
+            #region Moderation Commands
+            // Purge
+            // Mute
+            // UnMute
+            // Ban
+            #endregion
+            #region Utility Commands
+            // Info
+            // Random
+            // Date
+            // Ask
+            #endregion
+            #region Birthday Commands
+            // SetBirthday
+            // Birthday
+            // BirthdayList
+            #endregion
 
             Commands = Client.UseCommandsNext(commandsConfig);
-            Commands.RegisterCommands<CommandTest>();
+            Commands.RegisterCommands<LevelCommands>();
+            Commands.RegisterCommands<FunCommands>();
+            Commands.RegisterCommands<MathCommands>();
+            Commands.RegisterCommands<ModerationCommands>();
+            Commands.RegisterCommands<UtilityCommands>();
+            Commands.RegisterCommands<BirthdayCommands>();
 
             await Client.ConnectAsync();
             await Task.Delay(-1);
