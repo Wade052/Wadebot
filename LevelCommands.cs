@@ -39,5 +39,6 @@ namespace Wadebot.commands
                 $"XP: **{xp}/{needed}**"
             );
         }
+
     }
 }
