@@ -58,6 +58,17 @@ namespace Wadebot
                 PRIMARY KEY (UserId, GuildId)   
 );";
             LevelsCmd.ExecuteNonQuery();
+
+            var Balance = connection.CreateCommand();
+            Balance.CommandText =
+            @"
+            CREATE TABLE IF NOT EXISTS Balance (
+                UserId  TEXT NOT NULL,
+                GuildId TEXT NOT NULL,
+                Balance   INTEGER NOT NULL,
+                PRIMARY KEY (UserId, GuildId)
+            );";
+            Balance.ExecuteNonQuery();
         }
         public static (int xp, int level) GetOrCreateLevel(ulong userId, ulong guildId)
         {
@@ -128,6 +139,65 @@ namespace Wadebot
             return leveledUp;
         }
 
+
+        public static int GetOrCreateBalance(ulong userId, ulong guildId)
+        {
+            using var connection = GetConnection();
+            connection.Open();
+
+            var select = connection.CreateCommand();
+            select.CommandText =
+            @"
+    SELECT Balance
+    FROM Balance
+    WHERE UserId = $user AND GuildId = $guild;
+    ";
+
+            select.Parameters.AddWithValue("$user", userId.ToString());
+            select.Parameters.AddWithValue("$guild", guildId.ToString());
+
+            var result = select.ExecuteScalar();
+
+            if (result != null)
+                return Convert.ToInt32(result);
+
+            var insert = connection.CreateCommand();
+            insert.CommandText =
+            @"
+    INSERT INTO Balance (UserId, GuildId, Balance)
+    VALUES ($user, $guild, 0);
+    ";
+
+            insert.Parameters.AddWithValue("$user", userId.ToString());
+            insert.Parameters.AddWithValue("$guild", guildId.ToString());
+            insert.ExecuteNonQuery();
+
+            return 0;
+        }
+
+        public static int AddCoins(ulong userId, ulong guildId, int amount)
+        {
+            int currentBalance = GetOrCreateBalance(userId, guildId);
+            int newBalance = currentBalance + amount;
+
+            using var connection = GetConnection();
+            connection.Open();
+
+            var update = connection.CreateCommand();
+            update.CommandText =
+            @"
+    UPDATE Balances
+    SET Balance = $balance
+    WHERE UserId = $user AND GuildId = $guild;
+    ";
+
+            update.Parameters.AddWithValue("$balance", newBalance);
+            update.Parameters.AddWithValue("$user", userId.ToString());
+            update.Parameters.AddWithValue("$guild", guildId.ToString());
+            update.ExecuteNonQuery();
+
+            return newBalance;
+        }
 
         public static SqliteConnection GetConnection()
         {

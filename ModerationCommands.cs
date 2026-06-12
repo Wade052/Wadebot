@@ -32,21 +32,28 @@ namespace Wadebot
 
             // Get messages
             var messages = await ctx.Channel.GetMessagesAsync(amt + 1); // +1 to include the purge command itself
+            try
+            {
+                // Delete messages
+                await ctx.Channel.DeleteMessagesAsync(messages);
 
-            // Delete messages
-            await ctx.Channel.DeleteMessagesAsync(messages);
+                // Confirmation message
+                var confirmation = await ctx.Channel.SendMessageAsync($"🧹 Deleted {amt} messages!");
+                string timestamp = DateTime.Now.ToString("HH:mm:ss");
+                var user = ctx.User;
 
-            // Confirmation message
-            var confirmation = await ctx.Channel.SendMessageAsync($"🧹 Deleted {amt} messages!");
-            string timestamp = DateTime.Now.ToString("HH:mm:ss");
-            var user = ctx.User;
+                // Optional: auto-delete the confirmation message after a short delay
+                await Task.Delay(3000);
+                await confirmation.DeleteAsync();
 
-            // Optional: auto-delete the confirmation message after a short delay
-            await Task.Delay(3000);
-            await confirmation.DeleteAsync();
-
-            LogCommand(ctx, "Purge", $"{user} purged {amt} in {ctx.Guild} , {ctx.Channel}");
-            await HandleXpAsync(ctx);
+                LogCommand(ctx, "Purge", $"{user} purged {amt} in {ctx.Guild} , {ctx.Channel}");
+                await HandleXpAsync(ctx);
+            }
+            catch (Exception ex)
+            {
+                await ctx.Channel.SendMessageAsync("An error occurred while trying to delete messages.");
+                Console.WriteLine($"Error in Purge command: {ex.Message}");
+            }
         }
 
 

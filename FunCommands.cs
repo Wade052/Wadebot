@@ -22,7 +22,7 @@ public class FunCommands : BaseCommandModule
         "Hello", "Im not alive", "I was created in C#",
         "Not all roads lead to rome", "absolute lamp",
         "Hue Hue Hue", "Hello World", ":D",
-        "in the big 26 💔", "oh word?", "Cat"
+        "in the big 26 💔", "oh word?", "Cat", "My fellow Americans",
     };
 
         string chosenWord = words[rand.Next(words.Length)];
@@ -285,6 +285,24 @@ public class FunCommands : BaseCommandModule
         LogCommand(ctx, "Roulette", $"{user} Pinged {chosen} with the bot");
         await HandleXpAsync(ctx);
 
+    }
+    [Command("TheLook")]
+    [Cooldown(1, 5, CooldownBucketType.User)]
+    public async Task TheLook(CommandContext ctx)
+    {
+        string filepath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "TheLook.jpg");
+        if (!File.Exists(filepath))
+        {
+            await ctx.RespondAsync($"Technical Error: I looked for the image at `{filepath}` but it wasn't there!");
+            return;
+        }
+        using var fs = new FileStream(filepath, FileMode.Open, FileAccess.Read);
+        await new DiscordMessageBuilder()
+            .WithContent("The Look")
+            .AddFile(fs)
+            .SendAsync(ctx.Channel);
+        LogCommand(ctx, "TheLook", "Sent The Look image");
+        await HandleXpAsync(ctx);
     }
     #endregion
 
